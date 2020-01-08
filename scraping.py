@@ -5,12 +5,13 @@ from datetime import datetime
 
 def get_dfs(stock_number):
     dfs = []
-    year = [2018,2019] #2017〜2019年までの株価データを取得
+    year = [2010,2020] #2010〜2020年までの株価データを取得
+    headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362"}
     for y in year:
         try:
             print(y)
             url = 'https://kabuoji3.com/stock/{}/{}/'.format(stock_number,y)
-            soup = BeautifulSoup(requests.get(url).content,'html.parser')
+            soup = BeautifulSoup(requests.get(url,headers=headers).content,'html.parser')
             tag_tr = soup.find_all('tr')
             head = [h.text for h in tag_tr[0].find_all('th')]
             data = []
@@ -36,7 +37,7 @@ def concatenate(dfs):
     return data
 
 #作成したコードリストを読み込む
-code_list = pd.read_csv('code_list.csv')
+code_list = pd.read_csv('meigara.csv')
 
 #複数のデータフレームをcsvで保存
 for i in range(len(code_list)):
@@ -45,4 +46,4 @@ for i in range(len(code_list)):
     print(k,v)
     dfs = get_dfs(k)
     data = concatenate(dfs) 
-    data.to_csv('{}-{}.csv'.format(k,v))
+    data.to_csv('data/{}-{}.csv'.format(k,v))

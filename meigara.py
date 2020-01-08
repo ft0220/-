@@ -26,19 +26,16 @@ def get_meigara(code):
 
   return code, name, short_name, market, unit, sector
 
-
-def meigara_generator(code_range):
-
-  for code in code_range:
-    meigara = get_meigara(code)
-    if meigara:
-      print(meigara)
-      yield meigara
-    time.sleep(1)
-
 if __name__ == '__main__':
 
-    with open('meigara.csv','w') as f:
+    with open('meigaratest.csv','w',encoding="utf_8_sig") as f:
         writer = csv.writer(f)
         writer.writerow(['code','name','short_name','market','unit','sector'])
-        writer.writerow(meigara_generator(range(0000,9999)))
+        for code in range(1300,9999):
+          meigara = get_meigara(code)
+          if meigara:
+            writer.writerow([row for row in meigara])
+            print(meigara)
+          else:
+            print(meigara)
+          time.sleep(1)
